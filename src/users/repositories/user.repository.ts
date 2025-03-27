@@ -21,7 +21,7 @@ export class UserRepository extends AbstractRepository<User, UserCreationArgs> {
   ) {
     const document = await this.userModel.findOne({
       where: {
-        telegramId: tgId,
+        telegramId: String(tgId),
       },
       ...options,
     });

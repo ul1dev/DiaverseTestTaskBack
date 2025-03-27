@@ -52,7 +52,7 @@ export class UsersService {
     if (isCreated) return isCreated;
 
     const user = await this.userRepository.create({
-      telegramId: id,
+      telegramId: String(id),
       firstName: first_name?.trim(),
       lastName: last_name?.trim(),
       userName: username?.trim(),
@@ -63,7 +63,7 @@ export class UsersService {
 
   async initUser(userData: InitUserDto) {
     let user = await this.userRepository.findOne({
-      where: { telegramId: userData.telegramId },
+      where: { telegramId: String(userData.telegramId) },
     });
 
     if (!user) {

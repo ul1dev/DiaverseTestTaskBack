@@ -1,54 +1,26 @@
 version: '3'
 
 services:
-  # app:
-  #   build: ./
-
-  #   container_name: 'coinappback'
-  #   image: ulidev/coinappback
-
-  #   restart: always
-
-  #   links:
-  #     - database:database
-
-  #   environment:
-  #     - MYSQL_HOST=database
-  #     - MYSQL_PORT=3306
-  #     - NODE_ENV=production
-
-  #   depends_on:
-  #     - database
-
-  # networks:
-  #   - app-network
-
   database:
-    container_name: 'database'
-    image: mysql:8.0
+    container_name: 'postgres-db'
+    image: postgres:15-alpine
     restart: always
     environment:
-      MYSQL_DATABASE: 'MainDatabase'
-      MYSQL_USER: 'MainUser'
-      MYSQL_PASSWORD: 'dkfjsdofnsofnmno5j84584nknvkIDJFIDOFJODS&&&***&(hjhdfkldf'
-      MYSQL_ROOT_PASSWORD: 'root'
-      LANG: C.UTF-8
+      POSTGRES_DB: 'MainDatabase'
+      POSTGRES_USER: 'MainUser'
+      POSTGRES_PASSWORD: 'dkfjsdofnsofnmno5j84584nknvkIDJFIDOFJODS&&&***&(hjhdfkldf'
+      LC_COLLATE: 'C.UTF-8'
+      LC_CTYPE: 'C.UTF-8'
+      TZ: 'Etc/UTC'
     ports:
-      - '3306:3306'
-    expose:
-      - '3306'
+      - '5432:5432'
     volumes:
-      - database:/var/lib/mysql
-    command:
-      [
-        'mysqld',
-        '--character-set-server=utf8mb4',
-        '--collation-server=utf8mb4_unicode_ci',
-      ]
-    # networks:
-    #   - app-network
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U MainUser -d MainDatabase']
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
 volumes:
-  database:
-# networks:
-#   app-network:
+  postgres_data:
